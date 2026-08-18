@@ -9,15 +9,9 @@ const validateCreateUser = (
 ) => {
   const result = createUserSchema.safeParse(req.body);
 
-  //   if (!result.success) {
-  //      res.status(400).json({
-  //       message: "Validation failed",
-  //       errors: result.error.issues,
-  //     });
-
-  //     return ;
-
-  throw new AppError("Validation failed", 400);
+  if (!result.success) {
+    throw new AppError("Validation failed", 400);
+  }
 
   next();
 };
