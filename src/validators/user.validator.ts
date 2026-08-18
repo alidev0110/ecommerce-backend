@@ -12,4 +12,16 @@ const createUserSchema = z.object({
 
 type CreateUserInput = z.infer<typeof createUserSchema>;
 
-export { createUserSchema, type CreateUserInput };
+const loginUserSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+type LoginUserInput = z.infer<typeof loginUserSchema>;
+
+export {
+  createUserSchema,
+  loginUserSchema,
+  type CreateUserInput,
+  type LoginUserInput,
+};

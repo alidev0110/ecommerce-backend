@@ -1,9 +1,13 @@
 import { Router } from "express";
-import { createUser } from "../controllers/user.controller.ts";
-import { validateCreateUser } from "../middlewares/validateUser.middleware.ts";
+import { createUser, loginUser } from "../controllers/user.controller.ts";
+import {
+  validateCreateUser,
+  validateLoginUser,
+} from "../middlewares/validateUser.middleware.ts";
 
 const router = Router();
 
-router.post("/user", validateCreateUser, createUser);
+router.post("/auth/register", validateCreateUser, createUser);
+router.post("/auth/login", validateLoginUser, loginUser);
 
 export default router;
