@@ -9,6 +9,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/jwt.util.ts";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 const createUser = async ({
   name,
@@ -50,7 +51,7 @@ const loginUser = async ({ email, password }: LoginUserInput) => {
   const accessToken = generateAccessToken(existingUser.id, existingUser.role);
   const refreshToken = generateRefreshToken(existingUser.id);
   const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-  
+
   await prisma.refreshToken.create({
     data: {
       token_hash: hashedRefreshToken,
@@ -61,4 +62,64 @@ const loginUser = async ({ email, password }: LoginUserInput) => {
   return { accessToken, refreshToken };
 };
 
-export { createUser, loginUser };
+const getMe = async (id: number) => {
+  if (!id) {
+    throw new AppError("Not authenticated", 401);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: id },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  return user;
+};
+
+const refreshAccessToken = async (refreshToken: string) => {
+  const decoded = jwt.verify(
+    refreshToken,
+    process.env.JWT_SECRET as string,
+  ) as JwtPayload;
+  const userId = decoded.userId;
+
+  const refreshTokens = await prisma.refreshToken.findMany({
+    where: { user_id: userId },
+  });
+
+  let matchedToken = null;
+
+  for (const token of refreshTokens) {
+    const isMatch = await bcrypt.compare(refreshToken, token.token_hash);
+    if (isMatch) {
+      matchedToken = token;
+      break;
+    }
+  }
+
+  if (!matchedToken) {
+    throw new AppError("Invalid refresh token", 401);
+  }
+
+  if (matchedToken.revoked) {
+    throw new AppError("Refresh token has been revoked", 401);
+  }
+
+  if (matchedToken.expires_at < new Date()) {
+    throw new AppError("Refresh token expired", 401);
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  const newAccessToken = generateAccessToken(user.id, user.role);
+
+  return { accessToken: newAccessToken };
+};
+
+export { createUser, loginUser, getMe, refreshAccessToken };
