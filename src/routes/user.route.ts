@@ -4,6 +4,7 @@ import {
   loginUser,
   getMe,
   refreshAccessToken,
+  logoutUser,
 } from "../controllers/user.controller.ts";
 import {
   validateCreateUser,
@@ -21,5 +22,6 @@ router.post("/auth/register", registerLimiter, validateCreateUser, createUser);
 router.post("/auth/login", loginLimiter, validateLoginUser, loginUser);
 router.get("/auth/me", auth, getMe);
 router.post("/auth/refresh", refreshAccessToken);
+router.post("/auth/logout", logoutUser);
 
 export default router;

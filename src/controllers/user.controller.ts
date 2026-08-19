@@ -3,6 +3,7 @@ import { createUser as createUserService } from "../services/user.service.ts";
 import { loginUser as loginUserService } from "../services/user.service.ts";
 import { getMe as getMeService } from "../services/user.service.ts";
 import { refreshAccessToken as refreshAccessTokenService } from "../services/user.service.ts";
+import { logoutUser as logoutUserService } from "../services/user.service.ts";
 import type {
   CreateUserInput,
   LoginUserInput,
@@ -77,4 +78,14 @@ const refreshAccessToken = async (
   }
 };
 
-export { createUser, loginUser, getMe, refreshAccessToken };
+const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { refreshToken } = req.body;
+    const result = await logoutUserService(refreshToken);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createUser, loginUser, getMe, refreshAccessToken, logoutUser };

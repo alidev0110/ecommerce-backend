@@ -10,6 +10,7 @@ import {
   generateRefreshToken,
 } from "../utils/jwt.util.ts";
 import jwt, { type JwtPayload } from "jsonwebtoken";
+import { findMatchingRefreshToken } from "../utils/matchToken.util.ts";
 
 const createUser = async ({
   name,
@@ -88,16 +89,7 @@ const refreshAccessToken = async (refreshToken: string) => {
   const refreshTokens = await prisma.refreshToken.findMany({
     where: { user_id: userId },
   });
-
-  let matchedToken = null;
-
-  for (const token of refreshTokens) {
-    const isMatch = await bcrypt.compare(refreshToken, token.token_hash);
-    if (isMatch) {
-      matchedToken = token;
-      break;
-    }
-  }
+  let matchedToken = await findMatchingRefreshToken(userId, refreshToken);
 
   if (!matchedToken) {
     throw new AppError("Invalid refresh token", 401);
@@ -122,4 +114,25 @@ const refreshAccessToken = async (refreshToken: string) => {
   return { accessToken: newAccessToken };
 };
 
-export { createUser, loginUser, getMe, refreshAccessToken };
+const logoutUser = async (refreshToken: string) => {
+  const decoded = jwt.verify(
+    refreshToken,
+    process.env.JWT_SECRET as string,
+  ) as JwtPayload;
+  const userId = decoded.user_id;
+
+  const matchedToken = await findMatchingRefreshToken(userId, refreshToken);
+
+  if (!matchedToken) {
+    throw new AppError("Invalid refresh token", 401);
+  }
+
+  await prisma.refreshToken.update({
+    where: { id: matchedToken.id },
+    data: { revoked: true },
+  });
+
+  return { message: "Logged out successfully" };
+};
+
+export { createUser, loginUser, getMe, refreshAccessToken, logoutUser };
