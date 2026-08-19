@@ -11,6 +11,7 @@ import {
 } from "../utils/jwt.util.ts";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { findMatchingRefreshToken } from "../utils/matchToken.util.ts";
+import { BCRYPT_SALT_ROUNDS } from "../config/constants.ts";
 
 const createUser = async ({
   name,
@@ -24,7 +25,7 @@ const createUser = async ({
     throw new AppError("Email already registered", 409);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
 
   const newUser = await prisma.user.create({
     data: {
@@ -51,7 +52,7 @@ const loginUser = async ({ email, password }: LoginUserInput) => {
 
   const accessToken = generateAccessToken(existingUser.id, existingUser.role);
   const refreshToken = generateRefreshToken(existingUser.id);
-  const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+  const hashedRefreshToken = await bcrypt.hash(refreshToken, BCRYPT_SALT_ROUNDS);
 
   await prisma.refreshToken.create({
     data: {

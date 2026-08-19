@@ -1,7 +1,8 @@
 import rateLimit from "express-rate-limit";
+import { LOGIN_RATE_LIMIT, REGISTER_RATE_LIMIT } from "../config/constants.ts";
 
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  ...LOGIN_RATE_LIMIT,
   max: 5,
   message: { message: "Too many login attempts. Try again later." },
   standardHeaders: true,
@@ -9,7 +10,7 @@ const loginLimiter = rateLimit({
 });
 
 const registerLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
+  ...REGISTER_RATE_LIMIT,
   max: 3,
   message: { message: "Too many register attempts. Try again later." },
   standardHeaders: true,
