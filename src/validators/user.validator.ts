@@ -5,7 +5,7 @@ const createUserSchema = z.object({
     .string()
     .min(2, "Name must be more than 2 letters")
     .max(20, "Name must be less than 20 letters"),
-  email: z.email(),
+  email: z.email().lowercase().trim(),
   password: z.string().min(8, "Password must be at least 8 characters"),
   phone: z.string().min(8, "Phone number seems too short").optional(),
 });
