@@ -52,7 +52,10 @@ const loginUser = async ({ email, password }: LoginUserInput) => {
 
   const accessToken = generateAccessToken(existingUser.id, existingUser.role);
   const refreshToken = generateRefreshToken(existingUser.id);
-  const hashedRefreshToken = await bcrypt.hash(refreshToken, BCRYPT_SALT_ROUNDS);
+  const hashedRefreshToken = await bcrypt.hash(
+    refreshToken,
+    BCRYPT_SALT_ROUNDS,
+  );
 
   await prisma.refreshToken.create({
     data: {
@@ -87,9 +90,6 @@ const refreshAccessToken = async (refreshToken: string) => {
   ) as JwtPayload;
   const userId = decoded.userId;
 
-  const refreshTokens = await prisma.refreshToken.findMany({
-    where: { user_id: userId },
-  });
   let matchedToken = await findMatchingRefreshToken(userId, refreshToken);
 
   if (!matchedToken) {
