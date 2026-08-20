@@ -16,7 +16,11 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
       token,
       process.env.JWT_SECRET as string,
     ) as JwtPayload;
-    console.log("---------------" + decoded);
+
+    if (decoded.type !== "access") {
+      throw new AppError("Invalid token type", 401);
+    }
+
     req.user = decoded;
   } catch (error) {
     throw new AppError("Invalid or expired token", 401);

@@ -90,6 +90,10 @@ const refreshAccessToken = async (refreshToken: string) => {
   ) as JwtPayload;
   const userId = decoded.userId;
 
+  if (decoded.type !== "refresh") {
+    throw new AppError("Invalid token type", 401);
+  }
+
   let matchedToken = await findMatchingRefreshToken(userId, refreshToken);
 
   if (!matchedToken) {
