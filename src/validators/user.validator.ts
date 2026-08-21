@@ -21,7 +21,7 @@ const createUserSchema = z.object({
 type CreateUserInput = z.infer<typeof createUserSchema>;
 
 const loginUserSchema = z.object({
-  email: z.email(),
+  email: z.email().lowercase().trim(),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
