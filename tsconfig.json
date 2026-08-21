@@ -41,4 +41,6 @@
     "esModuleInterop": true,
     "rewriteRelativeImportExtensions": true
   },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "tests"]
 }
