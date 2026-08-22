@@ -33,7 +33,7 @@ describe("login validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["email"]);
+        expect(result.error.issues[0]?.path).toEqual(["email"]);
       }
     });
 
@@ -45,7 +45,7 @@ describe("login validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["email"]);
+        expect(result.error.issues[0]?.path).toEqual(["email"]);
       }
     });
 
@@ -57,7 +57,7 @@ describe("login validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -66,7 +66,7 @@ describe("login validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -76,12 +76,11 @@ describe("login validation", () => {
       expect(result.success).toBe(false);
 
       if (!result.success) {
-        expect(result.error.issues[0].code).toBe("unrecognized_keys");
+        expect(result.error.issues[0]?.code).toBe("unrecognized_keys");
       }
     });
   });
 });
-
 
 describe("register validation", () => {
   const validData = {
@@ -128,7 +127,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["name"]);
+        expect(result.error.issues[0]?.path).toEqual(["name"]);
       }
     });
 
@@ -137,7 +136,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["name"]);
+        expect(result.error.issues[0]?.path).toEqual(["name"]);
       }
     });
 
@@ -149,7 +148,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["name"]);
+        expect(result.error.issues[0]?.path).toEqual(["name"]);
       }
     });
 
@@ -158,7 +157,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["email"]);
+        expect(result.error.issues[0]?.path).toEqual(["email"]);
       }
     });
 
@@ -170,7 +169,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["email"]);
+        expect(result.error.issues[0]?.path).toEqual(["email"]);
       }
     });
 
@@ -179,7 +178,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -191,7 +190,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -203,7 +202,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -215,7 +214,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -227,7 +226,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["password"]);
+        expect(result.error.issues[0]?.path).toEqual(["password"]);
       }
     });
 
@@ -236,7 +235,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(["phone"]);
+        expect(result.error.issues[0]?.path).toEqual(["phone"]);
       }
     });
 
@@ -248,7 +247,7 @@ describe("register validation", () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].code).toBe("unrecognized_keys");
+        expect(result.error.issues[0]?.code).toBe("unrecognized_keys");
       }
     });
   });
